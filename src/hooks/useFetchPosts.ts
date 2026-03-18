@@ -8,9 +8,14 @@ import { getPostsWithAxios } from '../helpers/api/posts';
 const useFetchPosts = () => {
     const [posts, setPosts] = useState<TPostProps[]>();
     const [loading, setLoading] = useState<boolean>(false);
+    const [errorMessage,setErrorMessage] = useState('')
 
     function handleRefresh() {
-         getPostsWithAxios(onFetchPosts).finally(stopLoading);
+         getPostsWithAxios(onFetchPosts).catch(e => {
+          const error = e.message
+          if(error) setErrorMessage(error)
+         }).finally(stopLoading);
+        
     }
 
     function onFetchPosts(postItems: TPostProps[]) {
@@ -31,7 +36,7 @@ const useFetchPosts = () => {
     }, []);
 
 
-    return ({ posts, loading, handleRefresh })
+    return ({ posts, loading, handleRefresh,errorMessage })
 }
 
 export default useFetchPosts

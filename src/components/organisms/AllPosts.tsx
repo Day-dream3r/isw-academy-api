@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
 import PostItem, { TPostProps } from '../molecules/PostItem';
 // import { useState } from 'react';
 import useFetchPosts from '../../hooks/useFetchPosts';
@@ -12,7 +12,7 @@ export default function AllPosts({ isLoading, posts }: TAllPostsProps) {
 
   // const [refreshing, setRefreshing] = useState(false);
 
-  const { handleRefresh } = useFetchPosts()
+  const { handleRefresh, errorMessage } = useFetchPosts()
   // const fetchNewData = async () => {
   //   setRefreshing(true); // Start the refresh indicator
 
@@ -35,13 +35,15 @@ export default function AllPosts({ isLoading, posts }: TAllPostsProps) {
   return isLoading ? (
     <ActivityIndicator />
   ) : (
-    <FlatList
-      data={posts}
-      refreshing={isLoading}
-      onRefresh={handlePostRefresh}
-      renderItem={({ item }) => <PostItem {...item} />}
-      contentContainerStyle={styles.list}
-    />
+    errorMessage ? <Text>{errorMessage}</Text> : (
+      <FlatList
+        data={posts}
+        refreshing={isLoading}
+        onRefresh={handlePostRefresh}
+        renderItem={({ item }) => <PostItem {...item} />}
+        contentContainerStyle={styles.list}
+      />
+    )
   );
 }
 
