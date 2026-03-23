@@ -35,7 +35,11 @@ apiClient.interceptors.request.use(async config => {
   const isOnline = typeof isConnected === 'boolean' ? isConnected : true;
 
   if (!isOnline)
-    return Promise.reject(new Error('Please connect to the internet'));
+    // return Promise.reject(new Error('Please connect to the internet'));
+
+    return Promise.reject(
+      new axios.AxiosError('Please connect to the internet', 'ERR_NETWORK'),
+    );
 
   return config;
 });

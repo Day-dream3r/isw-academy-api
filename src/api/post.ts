@@ -41,7 +41,6 @@ export const getPostFromAsyncStorage = async (): Promise<PostProp[]> => {
     return getPostsWithAxios();
   }
 };
-
 export function retrivePostFromMMKV() {
   const post = storage.getString('posts');
   if (post) return JSON.parse(post);

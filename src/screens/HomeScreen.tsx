@@ -77,10 +77,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     loadPost();
-  }, []);
-
-  useEffect(() => {
-    loadPost();
   }, [refreshCount]);
 
   return (
