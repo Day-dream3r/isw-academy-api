@@ -8,14 +8,16 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
+// Configure automatic retries
 axiosRetry(apiClient, {
   retries: 3,
   retryDelay: retryCount => {
+    // Exponential backoff: 1s, 2s, 4s...
     return Math.pow(2, retryCount) * 1000;
   },
   retryCondition: error => {
-    const isNetworkError = axiosRetry.isNetworkError(error);
-    console.log({ isNetworkError, error });
+    // Retry on network errors or 5xx responses
+    // Don't retry on 4xx client errors
     return (
       axiosRetry.isNetworkError(error) || axiosRetry.isRetryableError(error)
     );
@@ -35,11 +37,7 @@ apiClient.interceptors.request.use(async config => {
   const isOnline = typeof isConnected === 'boolean' ? isConnected : true;
 
   if (!isOnline)
-    // return Promise.reject(new Error('Please connect to the internet'));
-
-    return Promise.reject(
-      new axios.AxiosError('Please connect to the internet', 'ERR_NETWORK'),
-    );
+    return Promise.reject(new Error('Please connect to the internet'));
 
   return config;
 });
