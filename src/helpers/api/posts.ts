@@ -1,14 +1,14 @@
 import { client } from './request';
 import { TPostProps } from '../../components/molecules/PostItem';
 
-export function getPostsWithAxios(callback: (posts: TPostProps[]) => void) {
+export async function getPostsWithAxios() {
   return client.get('/posts').then(response => {
     const responseJson = response.data;
-    callback?.(responseJson);
+    return responseJson;
   });
 }
 
-export function getPostsWithAxiosAndSaveWithMMKV(
+export async function getPostsWithAxiosAndSaveWithMMKV(
   callback: (posts: TPostProps[]) => void,
 ) {
   return client.get('/posts').then(response => {

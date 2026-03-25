@@ -11,7 +11,7 @@ const useFetchPosts = () => {
     const [errorMessage,setErrorMessage] = useState('')
 
     function handleRefresh() {
-         getPostsWithAxios(onFetchPosts).catch(e => {
+         getPostsWithAxios().then(onFetchPosts).catch(e => {
           const error = e.message
           if(error) setErrorMessage(error)
          }).finally(stopLoading);
@@ -31,7 +31,7 @@ const useFetchPosts = () => {
     useEffect(() => {
         const storedPosts = retrievePostsFromMMKV();
         if (storedPosts.length > 0) setPosts(storedPosts);
-        else getPostsWithAxios(onFetchPosts).finally(stopLoading);
+        else getPostsWithAxios().then(onFetchPosts).finally(stopLoading);
 
     }, []);
 
