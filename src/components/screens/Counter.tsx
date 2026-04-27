@@ -3,7 +3,7 @@ import type { RootState } from '../../store';
 import { useSelector, useDispatch } from 'react-redux';
 import { decrement, increment } from '../../redux/counterSlice';
 import ParentView from '../templates/ParentView';
-import { Button, Pressable, Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 
 export function Counter() {
   const count = useSelector((state: RootState) => state.counter.value);
