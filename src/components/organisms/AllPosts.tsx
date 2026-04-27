@@ -1,11 +1,4 @@
-import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StyleSheet } from 'react-native';
 import PostItem, { TPostProps } from '../molecules/PostItem';
 import { useEffect, useState } from 'react';
 import { retrievePostsFromMMKV, savePostsInMMKV } from '../../helpers/api';
