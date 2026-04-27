@@ -3,7 +3,7 @@ import type { RootState } from '../../store';
 import { useSelector, useDispatch } from 'react-redux';
 import { decrement, increment } from '../../redux/counterSlice';
 import ParentView from '../templates/ParentView';
-import { Pressable, Text, View } from 'react-native';
+import { Button, Pressable, Text, View } from 'react-native';
 
 export function Counter() {
   const count = useSelector((state: RootState) => state.counter.value);
@@ -12,9 +12,9 @@ export function Counter() {
   return (
     <ParentView>
       <View>
-        <Pressable onPress={() => dispatch(increment())}>Increment</Pressable>
+        <Button title="Increment" onPress={() => dispatch(increment())} />
         <Text>{count}</Text>
-        <Pressable onPress={() => dispatch(decrement())}>Decrement</Pressable>
+        <Button title="Decrement" onPress={() => dispatch(decrement())} />
       </View>
     </ParentView>
   );
