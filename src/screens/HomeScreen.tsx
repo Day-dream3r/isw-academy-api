@@ -8,6 +8,7 @@ import {
   PostProp,
 } from '../api/post';
 import AllPost from '../component/AllPost';
+import ProfileScreen from './ProfileScreen';
 
 type ResponseError = {
   message: string;
@@ -84,11 +85,12 @@ const HomeScreen = () => {
       {error ? (
         <Text>{error}</Text>
       ) : (
-        <AllPost
-          loading={loading}
-          posts={post}
-          setRefreshCount={setRefreshCount}
-        />
+        <ProfileScreen />
+        // <AllPost
+        //   loading={loading}
+        //   posts={post}
+        //   setRefreshCount={setRefreshCount}
+        // />
       )}
     </View>
   );
