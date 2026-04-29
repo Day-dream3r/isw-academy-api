@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './redux/counterSlice';
+import counterReducer from './slices/counterSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
+  },
+  middleware: getDefaultMiddleware => {
+    const middleware = getDefaultMiddleware();
+    return middleware;
   },
 });
 

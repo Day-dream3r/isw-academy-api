@@ -1,7 +1,7 @@
 import React from 'react';
-import type { RootState } from '../../store';
+import type { RootState } from '../../redux/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { decrement, increment } from '../../redux/counterSlice';
+import { decrement, increment } from '../../redux/slices/counterSlice';
 import ParentView from '../templates/ParentView';
 import { Button, Text, View } from 'react-native';
 
