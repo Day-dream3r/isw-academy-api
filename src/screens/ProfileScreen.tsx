@@ -21,7 +21,7 @@ const ProfileScreen = () => {
 
   const dispatch = useDispatch();
   const { users: allUsers } = useSelector(userSelector);
-  console.log(allUsers);
+  //console.log(allUsers);
   const mobileUsers = useSelector(mobileUserSelector);
 
   const addUserFuntion = () => {
