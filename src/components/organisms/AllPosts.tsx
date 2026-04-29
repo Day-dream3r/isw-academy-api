@@ -1,53 +1,26 @@
-import { ActivityIndicator, Alert, FlatList, StyleSheet } from 'react-native';
-import PostItem, { TPostProps } from '../molecules/PostItem';
-import { useEffect, useState } from 'react';
-import { retrievePostsFromMMKV, savePostsInMMKV } from '../../helpers/api';
-import { getPostsWithAxios } from '../../helpers/api/posts';
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import PostItem from '../molecules/PostItem';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { postsSelector } from '../../redux/selectors/postsSelectors';
+import { fetchPosts } from '../../redux/slices/postsSlice';
+import { AppDispatch } from '../../redux/store';
 
 type ResponseError = {
   message: string;
 };
 
 export default function AllPosts() {
-  const [posts, setPosts] = useState<TPostProps[]>();
-  const [isLoading, setLoading] = useState<boolean>(false);
-
-  function onFetchPosts(posts: TPostProps[]) {
-    setPosts(posts);
-    savePostsInMMKV(posts);
-  }
-
-  function stopLoading() {
-    setLoading(false);
-  }
+  const { posts, isLoading } = useSelector(postsSelector);
+  const dispatch = useDispatch<AppDispatch>();
 
   function onRefresh() {
-    getPostsWithAxios()
-      .then(onFetchPosts)
-      .catch(e => {
-        const error = e as ResponseError;
-        Alert.alert('Error', error.message);
-      })
-      .finally(stopLoading);
+    dispatch(fetchPosts());
   }
 
   useEffect(() => {
-    const storedPosts = retrievePostsFromMMKV();
-    if (storedPosts.length > 0) setPosts(storedPosts);
-    else onRefresh();
+    onRefresh();
   }, []);
-
-  // Fetching and saving posts with AsyncStorage
-  // useEffect(() => {
-  //   retrievePostsFromAsyncStorage().then(retrievedPosts => {
-  //     if (retrievedPosts.length > 0) {
-  //       setPosts(retrievedPosts);
-  //       setLoading(false);
-  //     } else {
-  //       getPostsWithAxios(setPosts);
-  //     }
-  //   });
-  // }, []);
 
   return isLoading ? (
     <ActivityIndicator />
