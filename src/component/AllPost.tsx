@@ -1,23 +1,16 @@
+import React, { useEffect, useRef } from 'react';
 import {
-  View,
-  Text,
   ActivityIndicator,
   FlatList,
   StyleSheet,
-  Alert,
+  Text,
+  View,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { getPostsWithAxios, PostProp } from '../api/post';
-
-type AllPostProps = {
-  loading: Boolean;
-  posts: PostProp[];
-  setRefreshCount?: React.Dispatch<React.SetStateAction<number>>;
-};
-
-type ResponseError = {
-  message: string;
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { PostSelector } from '../../redux/reduxSelectors/postsSelectors';
+import { fetchPosts } from '../../redux/reduxSlices/postsSlice';
+import { AppDispatch } from '../../redux/reduxStore/store';
+import { PostProp } from '../api/post';
 
 function PostItem({ title, body }: PostProp) {
   return (
@@ -28,37 +21,29 @@ function PostItem({ title, body }: PostProp) {
   );
 }
 
-const AllPost = ({ loading, posts, setRefreshCount }: AllPostProps) => {
-  const [refreshing, setRefreshing] = useState<boolean>(false);
+const AllPost = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { posts, isLoading } = useSelector(PostSelector);
 
   const listRef = useRef<FlatList<PostProp>>(null);
 
-  async function getRefreshedPosts() {
-    try {
-      await getPostsWithAxios();
-      setRefreshCount?.(prev => prev + 1);
-    } catch (e) {
-      const error = e as ResponseError;
-      Alert.alert('Error', error.message);
-    }
+  useEffect(() => {
+    onRefresh();
+  }, []);
+
+  async function onRefresh() {
+    dispatch(fetchPosts());
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
   }
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await getRefreshedPosts();
-
-    listRef.current?.scrollToOffset({ offset: 0, animated: true });
-    setRefreshing(false);
-  };
-
-  return loading ? (
+  return isLoading ? (
     <ActivityIndicator />
   ) : (
     <FlatList
       data={posts}
       renderItem={({ item }) => <PostItem {...item} />}
       contentContainerStyle={styles.contentContainer}
-      refreshing={refreshing}
+      refreshing={isLoading}
       onRefresh={onRefresh}
     />
   );
@@ -79,5 +64,12 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     gap: 16,
+  },
+  errorMessageView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorMessageText: {
+    color: '#000000',
   },
 });
