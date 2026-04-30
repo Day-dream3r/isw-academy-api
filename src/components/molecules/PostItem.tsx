@@ -10,7 +10,7 @@ export type TPostProps = {
 export default function PostItem({ title, body, id }: TPostProps) {
   return (
     <View style={styles.listContainer}>
-      <Text style={styles.listItem}>{id} - {title}</Text>
+      <Text style={styles.listItem}>{id} - - {title}</Text>
       <Text>{body}</Text>
     </View>
   );
